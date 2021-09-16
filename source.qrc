@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="response_codes">
+    <file>Failed.png</file>
+    <file>Sended.png</file>
+    <file>Sending.png</file>
+  </qresource>
+</RCC>
