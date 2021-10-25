@@ -45,8 +45,10 @@ class callback_server(Thread):
         history_requests.append(r_body)
         r = requests.post(server_url, json=r_body)
         if r.text != ret_str:
-            request_status[request_status.index(r_body)] = -1
-            raise callback_clientException('Invalid response code')
+            request_status[history_requests.index(r_body)] = -1
+            exc = callback_clientException('Invalid response code')
+            exc.content = r.text
+            raise exc
         else:
             request_status[history_requests.index(r_body)] = 1
             self.group_id = group_id
@@ -220,7 +222,7 @@ class app_win(QMainWindow):
             if 'session info' in str(exc):
                 QMessageBox.critical(self, 'Блять!', "Неверный ключ сесии", QMessageBox.Ok)
             elif 'response code' in str(exc):
-                QMessageBox.critical(self, 'Блять!', "Сервер вернул не ту строку", QMessageBox.Ok)
+                QMessageBox.critical(self, 'Блять!', f"Сервер вернул не ту строку:\n{str(exc.content)}", QMessageBox.Ok)
             else:
                 print(traceback.format_exc())
                 QMessageBox.critical(self, 'Блять!', str(exc), QMessageBox.Ok)
